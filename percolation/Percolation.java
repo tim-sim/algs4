@@ -1,8 +1,7 @@
 
-
 public class Percolation {
     /**
-     * The instance of quick union algorithm 
+     * The instance of quick union algorithm
      */
     private WeightedQuickUnionUF uf;
 
@@ -11,42 +10,49 @@ public class Percolation {
      */
     private int n;
 
+    private int size;
+
     /**
      * N-by-N grid, false value indicates that site is blocked.
      */
-    private boolean grid[][];
-    
+    private boolean[][] grid;
+
     /**
      * Creates N-by-N grid, with all sites blocked.
      */
     public Percolation(int N) {
         this.n = N;
+        size = n*n + 2;
+        uf = new WeightedQuickUnionUF(n * n + 2);
         grid = new boolean[n][n];
-        for (int i=0; i<n; i++)
-            for (int j=0; j<n; j++)
+        for (int i = 0; i < n; i++) {
+            uf.union(0, i + 1);
+			uf.union(size - 1, size - i - 2);
+            for (int j = 0; j < n; j++) {
                 grid[i][j] = false;
-        uf = new WeightedQuickUnionUF(n*n + 2);
+            }
+        }
     }
 
     /**
-     * Opens site (row i, column j) if it is not already. 
+     * Opens site (row i, column j) if it is not already.
      */
     public void open(int i, int j) {
-        checkIndices(i, j);
-        if (!get(i,j)) {
-            grid[i-1][j-1] = true;
-            int p = getFlatIndex(i, j);
-            if (i > 1 && get(i-1, j)) {
-                uf.union(p, getFlatIndex(i-1, j));
+        checkIndex(i, j);
+        if (!get(i, j)) {
+            grid[i - 1][j - 1] = true;
+            int p = flatIndex(i, j);
+            if (i > 1 && get(i - 1, j)) {
+                uf.union(p, flatIndex(i - 1, j));
             }
-            if (i < n && get(i+1,j)) {
-                uf.union(p, getFlatIndex(i+1, j));
+            if (i < n && get(i + 1, j)) {
+                uf.union(p, flatIndex(i + 1, j));
             }
-            if (j > 1 && get(i, j-1)) {
-                uf.union(p, getFlatIndex(i, j-1));
+            if (j > 1 && get(i, j - 1)) {
+                uf.union(p, flatIndex(i, j - 1));
             }
-            if (j < n && get(i, j+1)) {
-                uf.union(p, getFlatIndex(i, j+1));
+            if (j < n && get(i, j + 1)) {
+                uf.union(p, flatIndex(i, j + 1));
             }
         }
     }
@@ -55,29 +61,29 @@ public class Percolation {
      * Is site (row i, column j) open?
      */
     public boolean isOpen(int i, int j) {
-        checkIndices(i, j);
-        return get(i,j);
+        checkIndex(i, j);
+        return get(i, j);
     }
 
     /**
      * Is site (row i, column j) full?
      */
     public boolean isFull(int i, int j) {
-        checkIndices(i, j);
-        return get(i,j) && uf.connected(0, getFlatIndex(i,j));
+        checkIndex(i, j);
+        return get(i, j) && uf.connected(0, flatIndex(i, j));
     }
 
     /**
      * Does the system percolate?
      */
     public boolean percolates() {
-        return uf.connected(0, uf.count());
+        return uf.connected(0, size - 1);
     }
 
     /**
-     * Checks if indices are in valid range. 
+     * Checks if indices are in valid range.
      */
-    private void checkIndices(int i, int j) {
+    private void checkIndex(int i, int j) {
         if (i < 1 || i > n || j < 1 || j > n) {
             throw new IndexOutOfBoundsException();
         }
@@ -88,9 +94,10 @@ public class Percolation {
     }
 
     /**
-     * Converts index of site in two-dimensional grid to flat index of one-dimensional array element (WeightedQuickUnionUF).  
+     * Converts index of site in two-dimensional grid to flat index of
+     * one-dimensional array element (WeightedQuickUnionUF).
      */
-    private int getFlatIndex(int i, int j) {
-        return (i - 1)*n + j;
+    private int flatIndex(int i, int j) {
+        return (i - 1) * n + j;
     }
 }
