@@ -1,4 +1,3 @@
-
 public class Percolation {
     /**
      * The instance of quick union algorithm
@@ -22,12 +21,12 @@ public class Percolation {
      */
     public Percolation(int N) {
         this.n = N;
-        size = n*n + 2;
+        size = n * n + 2;
         uf = new WeightedQuickUnionUF(n * n + 2);
         grid = new boolean[n][n];
         for (int i = 0; i < n; i++) {
             uf.union(0, i + 1);
-			uf.union(size - 1, size - i - 2);
+            uf.union(size - 1, size - i - 2);
             for (int j = 0; j < n; j++) {
                 grid[i][j] = false;
             }
