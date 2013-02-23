@@ -1,20 +1,18 @@
+/**
+ * Implementation of Percolation data type.
+ * 
+ * @author Timur Nasibullin
+ * 
+ */
 public class Percolation {
-    /**
-     * The instance of quick union algorithm
-     */
-    private WeightedQuickUnionUF uf;
+    private WeightedQuickUnionUF uf; // The instance of quick union algorithm
 
-    /**
-     * The size of grid.
-     */
-    private int n;
+    private int size; // The number of elements in quick union algorithm object
 
-    private int size;
+    private boolean[][] grid; // N-by-N grid, false value indicates that site is
+                              // blocked
 
-    /**
-     * N-by-N grid, false value indicates that site is blocked.
-     */
-    private boolean[][] grid;
+    private int n; // The size of grid
 
     /**
      * Creates N-by-N grid, with all sites blocked.

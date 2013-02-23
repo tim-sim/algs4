@@ -1,11 +1,20 @@
+/**
+ * Implementation of Monte Carlo simulation to estimate the percolation
+ * threshold.
+ * 
+ * @author Timur Nasibullin
+ */
 public class PercolationStats {
-    private double mean;
-    private double stddev;
-    private double confidenceLo;
-    private double confidenceHi;
+    private double mean; // sample mean of percolation threshold
+
+    private double stddev; // sample standard deviation of percolation threshold
+
+    private double confidenceLo; // lower bound of the 95% confidence interval
+
+    private double confidenceHi; // upper bound of the 95% confidence interval
 
     /**
-     * perform T independent computational experiments on an N-by-N grid
+     * Performs T independent computational experiments on an N-by-N grid
      */
     public PercolationStats(int N, int T) {
         if (N <= 0 || T <= 0) {
@@ -27,6 +36,9 @@ public class PercolationStats {
         }
     }
 
+    /**
+     * Performs one computational experiment on an N-by-N grid
+     */
     private int run(int N) {
         Percolation percolation = new Percolation(N);
         int open = 0;
@@ -44,28 +56,28 @@ public class PercolationStats {
     }
 
     /**
-     * sample mean of percolation threshold
+     * Returns sample mean of percolation threshold
      */
     public double mean() {
         return mean;
     }
 
     /**
-     * sample standard deviation of percolation threshold
+     * Returns sample standard deviation of percolation threshold
      */
     public double stddev() {
         return stddev;
     }
 
     /**
-     * returns lower bound of the 95% confidence interval
+     * Returns lower bound of the 95% confidence interval
      */
     public double confidenceLo() {
         return confidenceLo;
     }
 
     /**
-     * returns upper bound of the 95% confidence interval
+     * Returns upper bound of the 95% confidence interval
      */
     public double confidenceHi() {
         return confidenceHi;
