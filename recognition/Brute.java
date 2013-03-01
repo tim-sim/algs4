@@ -6,7 +6,6 @@ import java.util.Arrays;
  * 
  */
 public class Brute {
-    private static final double ACCURACY = 0.0001;
     private static final String SEPARATOR = " -> ";
 
     public static void main(String[] args) {
@@ -25,10 +24,10 @@ public class Brute {
                         Point b = points[j];
                         Point c = points[k];
                         Point d = points[l];
-                        double slope = a.slopeTo(d)*a.compareTo(d);
-                        if (approxEquals(slope, a.slopeTo(b)*a.compareTo(b))
-                                && approxEquals(slope, a.slopeTo(c) * a.compareTo(c))) {
-                            StdOut.println(a + SEPARATOR + b + SEPARATOR + c + SEPARATOR + d);
+                        double slope = a.slopeTo(d);
+                        if (slope == a.slopeTo(b) && slope == a.slopeTo(c)) {
+                            StdOut.println(a + SEPARATOR + b + SEPARATOR + c
+                                    + SEPARATOR + d);
                             a.drawTo(d);
                         }
                     }
@@ -52,9 +51,5 @@ public class Brute {
             points[i] = new Point(in.readInt(), in.readInt());
         }
         return points;
-    }
-
-    private static boolean approxEquals(double v1, double v2) {
-        return Math.abs(v1 - v2) < ACCURACY;
     }
 }

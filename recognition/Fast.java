@@ -14,21 +14,23 @@ public class Fast {
 
         Point[] points = readPoints(args);
         int N = points.length;
-        // Arrays.sort(points);
+        Arrays.sort(points);
 
         for (int i = 0; i < N; i++) {
             Arrays.sort(points, i + 1, N, points[i].SLOPE_ORDER);
             int k = i + 1;
             for (int j = i + 2; j < N; j++) {
                 if (points[i].SLOPE_ORDER.compare(points[j], points[j - 1]) != 0) {
-                    if (j - k >= 4) {
-                        outputLine(points, k, j);
+                    if (j - k >= 3) {
+                        outputLine(points, i, k, j);
                         k = j;
+                    } else {
+                        k++;
                     }
                 }
             }
-            if (N - k >= 4) {
-                outputLine(points, k, N);
+            if (N - k >= 3) {
+                outputLine(points, i, k, N);
             }
         }
 
@@ -40,15 +42,19 @@ public class Fast {
         }
     }
 
-    private static void outputLine(Point[] points, int lo, int hi) {
-        for (int i = lo; i < hi; i++) {
-            StdOut.print(points[i]);
-            if (i < hi - 1) {
+    private static void outputLine(Point[] points, int cur, int lo, int hi) {
+        Point[] buf = new Point[hi - lo + 1];
+        buf[0] = points[cur];
+        System.arraycopy(points, lo, buf, 1, buf.length - 1);
+        Arrays.sort(buf);
+        for (int i = 0; i < buf.length; i++) {
+            StdOut.print(buf[i]);
+            if (i < buf.length - 1) {
                 StdOut.print(SEPARATOR);
             }
         }
         StdOut.println();
-        points[lo].drawTo(points[hi - 1]);
+        buf[0].drawTo(buf[buf.length - 1]);
     }
 
     private static Point[] readPoints(String[] args) {
