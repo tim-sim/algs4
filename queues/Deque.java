@@ -1,5 +1,14 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
+/**
+ * Implementation of double-ended queue.
+ * 
+ * @author Timur Nasibullin
+ * 
+ * @param <Item>
+ *            the type of queue element.
+ */
 public class Deque<Item> implements Iterable<Item> {
     private Node head;
     private Node tail;
@@ -34,6 +43,7 @@ public class Deque<Item> implements Iterable<Item> {
      * Insert the item at the front
      */
     public void addFirst(Item item) {
+        checkBeforeAdd(item);
         Node node = new Node(item);
         head.next.previos = node;
         node.next = head.next;
@@ -46,6 +56,7 @@ public class Deque<Item> implements Iterable<Item> {
      * Insert the item at the end
      */
     public void addLast(Item item) {
+        checkBeforeAdd(item);
         Node node = new Node(item);
         tail.previos.next = node;
         node.previos = tail.previos;
@@ -58,6 +69,7 @@ public class Deque<Item> implements Iterable<Item> {
      * Delete and return the item at the front
      */
     public Item removeFirst() {
+        checkBeforeRemove();
         Node node = head.next;
         head.next = node.next;
         node.next.previos = head;
@@ -69,6 +81,7 @@ public class Deque<Item> implements Iterable<Item> {
      * Delete and return the item at the end
      */
     public Item removeLast() {
+        checkBeforeRemove();
         Node node = tail.previos;
         tail.previos = node.previos;
         node.previos.next = tail;
@@ -77,30 +90,46 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     /**
+     * Is new element not null?
+     */
+    private void checkBeforeAdd(Item item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * Is the queue not empty?
+     */
+    private void checkBeforeRemove() {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
+
+    }
+
+    /**
      * Return an iterator over items in order from front to end
      */
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
-            Node current = head.next;
+            private Node current = head.next;
 
-            @Override
             public boolean hasNext() {
                 return current != tail;
             }
 
-            @Override
             public Item next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
                 Node node = current;
                 current = current.next;
                 return node.data;
             }
 
-            @Override
             public void remove() {
-                current.previos.next = current.next;
-                current.next.previos = current.previos;
-                current = current.next;
-                size--;
+                throw new UnsupportedOperationException();
             }
         };
     }

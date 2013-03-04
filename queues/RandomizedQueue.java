@@ -1,5 +1,14 @@
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
+/**
+ * Randomized queue implementation.
+ * 
+ * @author Timur Nasibullin
+ * 
+ * @param <Item>
+ *            the type of queue element.
+ */
 public class RandomizedQueue<Item> implements Iterable<Item> {
     private Item[] a;
     private int size;
@@ -7,7 +16,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     /**
      * Construct an empty randomized queue
      */
-    @SuppressWarnings("unchecked")
     public RandomizedQueue() {
         a = (Item[]) new Object[2];
         size = 0;
@@ -59,25 +67,45 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
     }
 
     /**
+     * Is new element not null?
+     */
+    private void checkBeforeAdd(Item item) {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+    }
+
+    /**
+     * Is the queue not empty?
+     */
+    private void checkBeforeRemove() {
+        if (size == 0) {
+            throw new NoSuchElementException();
+        }
+
+    }
+
+    /**
      * Return an independent iterator over items in random order
      */
     public Iterator<Item> iterator() {
         return new Iterator<Item>() {
-            int order[] = generateRandomOrder();
-            int current = 0;
+            private int[] order = generateRandomOrder();
+            private int current = 0;
 
-            @Override
             public boolean hasNext() {
                 return current != size;
             }
 
-            @Override
             public Item next() {
+                if (!hasNext()) {
+                    throw new NoSuchElementException();
+                }
                 return a[order[current++]];
             }
 
-            @Override
             public void remove() {
+                throw new UnsupportedOperationException();
             }
         };
     }
@@ -91,7 +119,6 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         return order;
     }
 
-    @SuppressWarnings("unchecked")
     private void resize(int capacity) {
         Item[] b = (Item[]) new Object[capacity];
         System.arraycopy(a, 0, b, 0, size);
