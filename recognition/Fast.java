@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 /**
+ * Sorting-based implementation of collinear points recognition. 
  * 
  * @author Timur Nasibullin
  * 
@@ -23,22 +24,13 @@ public class Fast {
                 if (points[i].SLOPE_ORDER.compare(points[j], points[j - 1]) != 0) {
                     if (j - k >= 3) {
                         outputLine(points, i, k, j);
-                        k = j;
-                    } else {
-                        k++;
                     }
+                    k = j;
                 }
             }
             if (N - k >= 3) {
                 outputLine(points, i, k, N);
             }
-        }
-
-        StdDraw.setPenRadius(0.006);
-        StdDraw.setPenColor(StdDraw.RED);
-
-        for (int i = 0; i < N; i++) {
-            points[i].draw();
         }
     }
 
@@ -58,12 +50,20 @@ public class Fast {
     }
 
     private static Point[] readPoints(String[] args) {
+        StdDraw.setPenRadius(0.006);
+        StdDraw.setPenColor(StdDraw.RED);
+
         In in = new In(args[0]);
         Point[] points = new Point[in.readInt()];
 
         for (int i = 0; i < points.length; i++) {
             points[i] = new Point(in.readInt(), in.readInt());
+            points[i].draw();
         }
+
+        StdDraw.setPenRadius();
+        StdDraw.setPenColor();
+        
         return points;
     }
 }

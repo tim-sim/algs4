@@ -1,6 +1,7 @@
 import java.util.Arrays;
 
 /**
+ * Bruteforce implementation of collinear points recognition.
  * 
  * @author Timur Nasibullin
  * 

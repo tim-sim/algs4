@@ -14,29 +14,7 @@ import java.util.Comparator;
 
 public class Point implements Comparable<Point> {
     // compare points by slope
-    public final Comparator<Point> SLOPE_ORDER = new Comparator<Point>() {
-        @Override
-        public int compare(Point p1, Point p2) {
-            int dx1 = p1.x - x;
-            int dx2 = p2.x - x;
-            int dy1 = p1.y - y;
-            int dy2 = p2.y - y;
-            if (dy1 == 0 && dx1 == 0) {
-                return (dy2 == 0 && dx2 == 0 ? 0 : -1);
-            }
-            if (dy2 == 0 && dx2 == 0) {
-                return 1;
-            }
-            if (dx1 == 0) {
-                return (dx2 == 0 ? 0 : 1);
-            }
-            if (dx2 == 0) {
-                return -1;
-            }
-            return Integer.signum(dy1 * dx2 - dy2 * dx1) 
-                    * Integer.signum(dx1) * Integer.signum(dx2);
-        }
-    };
+    public final Comparator<Point> SLOPE_ORDER = new PointComparator();
 
     private final int x; // x coordinate
     private final int y; // y coordinate
@@ -78,16 +56,60 @@ public class Point implements Comparable<Point> {
     // comparing y-coordinates and breaking ties by x-coordinates
     public int compareTo(Point that) {
         if (y == that.y) {
-            return x < that.x ? -1 : (x == that.x ? 0 : 1);
+            // if (x < that.x) {
+            // return -1;
+            // } else if (x == that.x) {
+            // return 0;
+            // } else {
+            // return 1;
+            // }
+            return new Integer(x).compareTo(new Integer(that.x));
 
+        } else {
+            return new Integer(y).compareTo(that.y);
         }
-        return y < that.y ? -1 : 1;
+        // if (y < that.y) {
+        // return -1;
+        // } else {
+        // return 1;
+        // }
     }
 
     // return string representation of this point
     public String toString() {
         /* DO NOT MODIFY */
         return "(" + x + ", " + y + ")";
+    }
+
+    private final class PointComparator implements Comparator<Point> {
+        public int compare(Point p1, Point p2) {
+            int dx1 = p1.x - x;
+            int dx2 = p2.x - x;
+            int dy1 = p1.y - y;
+            int dy2 = p2.y - y;
+            if (dy1 == 0 && dx1 == 0) {
+                if (dy2 == 0 && dx2 == 0) {
+                    return 0;
+                } else {
+                    return -1;
+                }
+            }
+            if (dy2 == 0 && dx2 == 0) {
+                return 1;
+            }
+            if (dx1 == 0) {
+                if (dx2 == 0) {
+                    return 0;
+                } else {
+                    return 1;
+                }
+            }
+            if (dx2 == 0) {
+                return -1;
+            }
+            return Integer.signum(dy1 * dx2 - dy2 * dx1) * Integer.signum(dx1)
+                    * Integer.signum(dx2);
+        }
     }
 
     // unit test
