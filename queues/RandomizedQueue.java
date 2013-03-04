@@ -110,7 +110,7 @@ public class RandomizedQueue<Item> implements Iterable<Item> {
         };
     }
 
-    protected int[] generateRandomOrder() {
+    private int[] generateRandomOrder() {
         int[] order = new int[size];
         for (int i = 0; i < size; i++) {
             order[i] = i;
